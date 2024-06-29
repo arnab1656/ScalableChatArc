@@ -1,81 +1,73 @@
-# Turborepo starter
+# Scalable Chat Application
 
-This is an official starter Turborepo.
+## Overview
 
-## Using this example
+This project is a scalable chat application built using Node.js, Socket.IO, Redis, Kafka and Postgres . The architecture is designed to handle high loads by scaling horizontally, ensuring that messages are efficiently distributed among clients while maintaining a responsive and real-time communication experience.
 
-Run the following command:
+## Features
+
+- Real-time messaging using WebSockets (Socket.IO)
+- Horizontal scalability with Redis for pub/sub messaging
+- Kafka integration for reliable message delivery
+- Structured and maintainable code following DRY and Orthogonal principles
+
+## 🏗️ Development & Contribution
+
+This is for you if you want to contribute to the Scalable_chat project or run it locally.
+
+Please read the [contribution guidelines](CONTRIBUTING.md) before contributing.
+
+### Requirements
+
+- Node
+- yarn
+- Docker
+
+### Setup
+
+As per Example .env.example file Look for the setup and create it `.env` or `.env.developement` in root, but you can choose to create your own `.env.local` files instead.
+
+In a terminal, start the dependencies (Postgres, Kafka ,Zookeeper and Redis) as Docker containers:
 
 ```sh
-npx create-turbo@latest
+docker compose -f docker-compose.yaml up
 ```
 
-## What's inside?
+Then:
 
-This Turborepo includes the following packages/apps:
+Go to the Server workspace of the apps
 
-### Apps and Packages
+RUN:
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+# Push the most recent Prisma schema to the database
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
+```sh
+npx run prisma db push
 ```
 
-### Develop
+### Database migrations
 
-To develop all apps and packages, run the following command:
+If you make changes to the Prisma schema, you need to run the following command to create a migration:
 
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+```sh
+pnpm run prisma migrate dev
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+You can also open Prisma Studio to see the database interface and edit data directly:
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
+```sh
+pnpm run prisma studio
 ```
 
-## Useful Links
+```sh
+yarn install
 
-Learn more about the power of Turborepo:
+# Run build to build everything once
+yarn build
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+
+# Start the dev server
+yarn run dev
+```
+
+You can now open the ChatApp at [http://localhost:4040](http://localhost:4040), API on port 8080.

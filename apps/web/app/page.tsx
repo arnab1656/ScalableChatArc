@@ -1,101 +1,61 @@
-import Image from "next/image";
-import { Button } from "@repo/ui/button";
-import styles from "./page.module.css";
+"use client";
+
+import React, { useState } from "react";
+import { useSocket } from "../context/SocketProvider";
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.tsx</code>
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const { sendMessage, incomingMessages } = useSocket();
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+  const [message, setMessage] = useState<string>("");
+
+  console.log("incomingMessages");
+  console.log(incomingMessages);
+
+  return (
+    <div
+      className="flex flex-col h-screen bg-cover bg-center"
+      style={{
+        backgroundImage: "url('https://source.unsplash.com/random/1600x900')",
+      }}
+    >
+      <header className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg">
+        <h1 className="text-2xl font-bold">Chat App</h1>
+        <button className="py-2 px-4 bg-red-600 rounded hover:bg-red-700 transition duration-300">
+          Logout
+        </button>
+      </header>
+
+      <main className="flex-1 p-4 overflow-y-auto bg-white bg-opacity-70 rounded-t-3xl shadow-inner">
+        <div className="flex flex-col space-y-4">
+          {incomingMessages.map((msg) => {
+            return (
+              <div className="self-end p-4 bg-blue-500 text-white rounded-lg shadow-md animate-fade-in-up">
+                <p className="text-sm">{msg}</p>
+              </div>
+            );
+          })}
         </div>
-        <Button
-          appName="web"
-          className="mx-auto rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-        >
-          Open alert
-        </Button>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file-text.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+
+      <footer className="p-4 bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg rounded-b-3xl">
+        <div className="flex">
+          <input
+            type="text"
+            placeholder="Type a message"
+            className="flex-1 px-4 py-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={(e) => {
+              setMessage(e.target.value);
+            }}
           />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+          <button
+            className="py-2 px-4 bg-green-500 text-white rounded-r-lg hover:bg-green-600 transition duration-300"
+            onClick={() => {
+              sendMessage(message);
+            }}
+          >
+            Send
+          </button>
+        </div>
       </footer>
     </div>
   );
